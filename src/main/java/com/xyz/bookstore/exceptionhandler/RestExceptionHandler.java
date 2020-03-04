@@ -24,7 +24,6 @@ import java.util.Map;
 /**
  * Created by hadi on 2/8/20.
  */
-@Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     private final Logger logger = LoggerFactory.getLogger(getClass());
