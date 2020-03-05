@@ -369,15 +369,25 @@ public class BookStoreTest {
 
         //sort by name descending, then get second page with size 5 as a list
         resultActions = this.mockMvc.perform(
-                get(booksPath + "/list?size=" + pageSize + "&page=1&sort=name,desc")
+                get(booksPath + "/slice?size=" + pageSize + "&page=1&sort=name,desc")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.*").isArray())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.*", Matchers.hasSize(pageSize)));
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.totalElements").doesNotExist())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.totalPages").doesNotExist())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.content").isArray())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.content", Matchers.hasSize(pageSize)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.size").value(pageSize))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.first").value(false))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.last").value(false))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.numberOfElements").value(pageSize))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.number").value(1))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.empty").value(false))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.sort.sorted").value(true));
 
         for (int i = 0; i < pageSize; i++) {
-            resultActions = resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.[" + i + "].name").value(createdBookDtos.get(pageSize + i).getName()));
-            resultActions = resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.[" + i + "].author").value(createdBookDtos.get(pageSize + i).getAuthor()));
+            resultActions = resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.content[" + i + "].name").value(createdBookDtos.get(pageSize + i).getName()));
+            resultActions = resultActions.andExpect(MockMvcResultMatchers.jsonPath("$.content[" + i + "].author").value(createdBookDtos.get(pageSize + i).getAuthor()));
         }
     }
 

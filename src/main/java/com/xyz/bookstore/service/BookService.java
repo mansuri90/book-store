@@ -7,10 +7,9 @@ import com.xyz.bookstore.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-
-import java.util.List;
 
 /**
  * Created by hadi on 2/8/20.
@@ -21,8 +20,8 @@ public class BookService {
     @Autowired
     private BookRepository bookRepository;
 
-    public List<SimpleBookView> getSimpleBookViewList(Pageable pageable) {
-        return bookRepository.getSimpleBookViewListBy(pageable);
+    public Slice<SimpleBookView> getSimpleBookViewList(Pageable pageable) {
+        return bookRepository.getSimpleBookViewSliceBy(pageable);
     }
 
     public Page<SimpleBookView> getSimpleBookViewPage(Pageable pageable) {

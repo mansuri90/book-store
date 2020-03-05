@@ -7,13 +7,11 @@ import com.xyz.bookstore.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by hadi on 2/8/20.
@@ -30,9 +28,9 @@ public class BookController {
         return bookService.getSimpleBookViewPage(pageable).map(SimpleBookDto::new);
     }
 
-    @GetMapping("/list")
-    public List<SimpleBookDto> getSimpleBookViewsList(Pageable pageable){
-        return bookService.getSimpleBookViewList(pageable).stream().map(SimpleBookDto::new).collect(Collectors.toList());
+    @GetMapping("/slice")
+    public Slice<SimpleBookDto> getSimpleBookViewsList(Pageable pageable){
+        return bookService.getSimpleBookViewList(pageable).map(SimpleBookDto::new);
     }
 
     @GetMapping("/{id}")
